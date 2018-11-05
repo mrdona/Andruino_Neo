@@ -3,6 +3,7 @@ using PanCardView.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -53,41 +54,44 @@ namespace Andruino.Views
         }
 
 
+        ObservableCollection<View> controls = new ObservableCollection<View>();
+        IEnumerable<View> controls_UnPin
+        {
+            get { return controls.Where(c => ((uc_PinCard)c).IsMinimize); }
+        }
+        IEnumerable<View> controls_Pin
+        {
+            get { return controls.Where(c => !((uc_PinCard)c).IsMinimize); }
+        }
         private void InitControls()
         {
             try
             {
-                //carousel_Main = new CarouselView();
-                //{
-                //    ItemTemplate = new DataTemplate(() => new ContentView()) //your template
-                //};
+                controls = new ObservableCollection<View>();
 
-                //var frm_tap = new TapGestureRecognizer();
-                //frm_tap.Tapped += (s, ee) => frm_Tapped(s, ee);
-                carousel_Main.ItemsSource = new ObservableCollection<object>();
+                var config = new uc_PinCard();
+                config.SetContent(new Views.V_Config() { IsEnabled = false });
+                config.Scale = 0.5;
+                config.Tapped += (o, e) => { frm_Tapped(o, e); };
+                config.UnPinTapped += (o, e) => { frm_UnPin(o, e); };
+                controls.Add(config);
 
-                var frmConfig = new Frame()
-                {
-                    HasShadow = true,
-                    Padding = new Thickness(5),
-                    Scale = 0.5,
-                    Content = new Views.V_Config(),
-                    HeightRequest = 50
-                };
-                carousel_Main.ItemsSource.Add(frmConfig);
-                //frmConfig.GestureRecognizers.Add(frm_tap);
 
-                var frmCommands = new Frame()
-                {
-                    HasShadow = true,
-                    Padding = new Thickness(5),
-                    Scale = 0.5,
-                    Content = new Views.V_Command()
-                };
-                carousel_Main.ItemsSource.Add(frmCommands);
-                //frmCommands.GestureRecognizers.Add(frm_tap);
+                var commands = new uc_PinCard();
+                commands.SetContent(new Views.V_Command() { IsEnabled = false });
+                commands.Scale = 0.5;
+                commands.Tapped += (o, e) => { frm_Tapped(o, e); };
+                commands.UnPinTapped += (o, e) => { frm_UnPin(o, e); };
+                controls.Add(commands);
 
-                carousel_Main.Children.Add(new IndicatorsControl());
+                foreach (var c in controls)
+                    ((uc_PinCard)c).IsMinimize = true;
+
+
+                carousel_Main.ItemsSource = controls;
+                //carousel_Main.Children.Add(new IndicatorsControl() { BackgroundColor = Color.Aquamarine , VerticalOptions = LayoutOptions.Start });
+                carousel_Main.Children.Add(new LeftArrowControl());
+                carousel_Main.Children.Add(new RightArrowControl());
             }
             catch (Exception ex)
             {
@@ -125,7 +129,6 @@ namespace Andruino.Views
             if(AppLoadingAnimation.IsVisible)
                 AppLoadingAnimation.ReloadImage();
 
-            InitControls();
         }
 
         private void frm_Error_Tapped(object sender, EventArgs e)
@@ -135,17 +138,75 @@ namespace Andruino.Views
 
         private void img_Config_Tapped(object sender, EventArgs e)
         {
-            uc_Config.IsVisible = !uc_Config.IsVisible;
-            img_Config.Source = uc_Config.IsVisible ? ImageSource.FromFile("optionsOff.png") : ImageSource.FromFile("optionsOn.png");
+            try
+            {
+                uc_Config.IsVisible = !uc_Config.IsVisible;
+                img_Config.Source = uc_Config.IsVisible ? ImageSource.FromFile("optionsOff.png") : ImageSource.FromFile("optionsOn.png");
+            }
+            catch (Exception ex)
+            {
+                Manage_Error(ex);
+            }
         }
 
         
         private void frm_Tapped(object sender, EventArgs e)
         {
-            //stk_Main.Children.Clear();
-            //var o = sender as Frame;
-            //o.Scale = 1;
-            //stk_Main.Children.Add(o);
+            try
+            {
+                var o = controls.First(c => c == sender) as uc_PinCard;
+                var newO = new uc_PinCard(o.ViewContent) { IsMinimize = false };
+                controls.Add(newO);
+                newO.Tapped += (oo, ee) => { frm_Tapped(oo, ee); };
+                newO.UnPinTapped += (oo, ee) => { frm_UnPin(oo, ee); };
+                controls.Remove(o);
+
+                carousel_Main.ItemsSource = controls_UnPin != null ? controls_UnPin.ToList() : null;
+
+                stk_Main.Children.Clear();
+                foreach (var c in controls_Pin)
+                    stk_Main.Children.Add(c);
+            }
+            catch (Exception ex)
+            {
+                Manage_Error(ex);
+            }
+        }
+
+        private void frm_UnPin(object sender, EventArgs e)
+        {
+            try
+            {
+                var o = controls.First(c => c == sender) as uc_PinCard;
+                var newO = new uc_PinCard(o.ViewContent) { IsMinimize = true, Scale = 0.6 };
+                controls.Add(newO);
+                newO.Tapped += (oo, ee) => { frm_Tapped(oo, ee); };
+                newO.UnPinTapped += (oo, ee) => { frm_UnPin(oo, ee); };
+                controls.Remove(o);
+
+                carousel_Main.ItemsSource = controls_UnPin != null ? controls_UnPin.ToList() : null;
+
+                stk_Main.Children.Clear();
+                if(controls_Pin != null)
+                    foreach (var c in controls_Pin)
+                        stk_Main.Children.Add(c);
+            }
+            catch (Exception ex)
+            {
+                Manage_Error(ex);
+            }
+        }
+
+        private void carousel_Main_ItemAppearing(CardsView view, PanCardView.EventArgs.ItemAppearingEventArgs args)
+        {
+            try
+            {
+                ((View)args.Item).Scale = 0.6;
+            }
+            catch (Exception ex)
+            {
+                Manage_Error(ex);
+            }
         }
     }
 }

@@ -12,13 +12,17 @@
             <TapGestureRecognizer Tapped="MainScreen_Tapped"/>
         </Grid.GestureRecognizers>
 
+        <ffimageloading:CachedImage DownsampleToViewSize="True" Aspect="Fill" Margin="-10"
+                                   VerticalOptions="Start" HorizontalOptions="FillAndExpand" 
+                                   Source="backgroundTitle.png"/>
+
         <ffimageloading:CachedImage x:Name="AppLoadingAnimation" DownsampleToViewSize="True" 
                                    HeightRequest="150" WidthRequest="150" IsVisible="False" 
                                    VerticalOptions="Center" HorizontalOptions="Center" 
                                    Opacity="0.2"/>
 
-        <ffimageloading:CachedImage x:Name="img_background" Opacity="0.2" HorizontalOptions="Start" VerticalOptions="End"
-			                        DownsampleToViewSize="true" WidthRequest="50" HeightRequest="50" Margin="15"
+        <ffimageloading:CachedImage x:Name="img_background" HorizontalOptions="Start" VerticalOptions="Start"
+			                        DownsampleToViewSize="true" WidthRequest="50" HeightRequest="50" Margin="20"
 			                        Source = "icon.png">
             
         </ffimageloading:CachedImage>
@@ -68,11 +72,12 @@
 
         </Grid>
 
-        <cards:CarouselView x:Name="carousel_Main" VerticalOptions="StartAndExpand" Margin="0,10,0,0">
+        <cards:CarouselView x:Name="carousel_Main" VerticalOptions="StartAndExpand" HorizontalOptions="CenterAndExpand" Margin="0,10,0,0"
+                            ItemAppearing="carousel_Main_ItemAppearing">
 
         </cards:CarouselView>
 
-        <StackLayout x:Name="stk_Main" VerticalOptions="CenterAndExpand"></StackLayout>
+        <StackLayout x:Name="stk_Main" VerticalOptions="CenterAndExpand" HorizontalOptions="Center"></StackLayout>
 
     </Grid>
 

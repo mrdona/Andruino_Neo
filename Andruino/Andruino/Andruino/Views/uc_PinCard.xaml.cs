@@ -11,18 +11,51 @@ namespace Andruino.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class uc_PinCard : ContentView
-    {      
+    {
+        public event EventHandler Tapped;
+        public event EventHandler UnPinTapped;
+
+
         public uc_PinCard()
         {
             InitializeComponent();
         }
 
+        public uc_PinCard(View content)
+        {
+            InitializeComponent();
+
+            SetContent(content);
+        }
+
+        public void SetContent(View content)
+        {
+            stk_Content.Children.Clear();
+            stk_Content.Children.Add(content);
+        }
+
         private void frm_Tapped(object sender, EventArgs e)
         {
-            //stk_Main.Children.Clear();
-            //var o = sender as Frame;
-            //o.Scale = 1;
-            //stk_Main.Children.Add(o);
+            Tapped?.Invoke(this, null);
+        }
+
+        private void UnPin_Tapped(object sender, EventArgs e)
+        {
+            UnPinTapped?.Invoke(this, null);
+        }
+
+
+        public View ViewContent { get { return stk_Content.Children.FirstOrDefault(); } }
+
+        bool _IsMinimize = false;
+        public bool IsMinimize
+        {
+            get { return _IsMinimize; }
+            set
+            {
+                _IsMinimize = value;
+                stk_Title.IsVisible = !value;
+            }
         }
     }
 }
