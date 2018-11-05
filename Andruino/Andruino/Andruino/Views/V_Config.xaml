@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Andruino.Views.V_Config">
+  <ContentView.Content>
+      <StackLayout>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="5">
+                <Label Text="Local IP : " VerticalOptions="Center"></Label>
+                <Entry x:Name="lbl_IP" Text="{Binding LocalIP}" Keyboard="Numeric" Placeholder="Local IP" 
+                       HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" Focused="lbl_IP_Focused"></Entry>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="5">
+                <Label Text="Server IP : "  VerticalOptions="Center"></Label>
+                <Entry x:Name="lbl_IPServer" Text="{Binding ServerIP}" Keyboard="Numeric" Placeholder="Server IP"
+                       HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center"></Entry>
+                <Label Text=":"  VerticalOptions="Center"></Label>
+                <Entry x:Name="lbl_PortServer" Text="{Binding ServerPort}" Keyboard="Numeric" Placeholder="Server Port" 
+                       HorizontalTextAlignment="Center"></Entry>
+            </StackLayout>
+        </StackLayout>
+  </ContentView.Content>
+</ContentView>

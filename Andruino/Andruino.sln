@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2046
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Andruino.Android", "Andruino\Andruino.Android\Andruino.Android.csproj", "{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Andruino", "Andruino\Andruino\Andruino.csproj", "{D3FE2779-8C24-4427-8CBA-EA2966C68626}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D3FE2779-8C24-4427-8CBA-EA2966C68626}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3FE2779-8C24-4427-8CBA-EA2966C68626}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3FE2779-8C24-4427-8CBA-EA2966C68626}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D3FE2779-8C24-4427-8CBA-EA2966C68626}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3FE2779-8C24-4427-8CBA-EA2966C68626}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3FE2779-8C24-4427-8CBA-EA2966C68626}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3456CEDC-80C6-423C-A5A4-094187F28D6C}
+	EndGlobalSection
+EndGlobal

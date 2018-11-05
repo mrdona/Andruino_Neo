@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Class="Andruino.Views.V_UDPLog">
+  <ContentView.Content>
+      <Grid>
+            <ScrollView>
+                <StackLayout x:Name="stk_Log"></StackLayout>
+            </ScrollView>
+            <Frame HorizontalOptions="End" VerticalOptions="Start" Margin="10" Padding="0"
+                WidthRequest="30" HeightRequest="30" BackgroundColor="Transparent">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Clear_Tapped"/>
+                </Frame.GestureRecognizers>
+                <ffimageloading:CachedImage WidthRequest="40" HeightRequest="40"
+			                        DownsampleToViewSize="true"
+			                        Source = "reloadOn.png">
+                </ffimageloading:CachedImage>
+            </Frame>
+        </Grid>
+  </ContentView.Content>
+</ContentView>

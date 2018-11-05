@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Andruino.Views.uc_PinCard">
+
+    <Frame x:Name="frm_Main" HasShadow="True" BorderColor="LightGray">
+        <Frame.GestureRecognizers>
+            <TapGestureRecognizer Tapped="frm_Main_Tapped"/>
+        </Frame.GestureRecognizers>
+        <StackLayout>
+            <ContentPresenter x:Name="stk_Title">
+
+            </ContentPresenter>
+            <ContentPresenter x:Name="stk_Content">
+
+            </ContentPresenter>
+        </StackLayout>
+    </Frame>
+    
+</ContentView>

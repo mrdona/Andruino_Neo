@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:Andruino.Views"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Class="Andruino.Views.V_Command">
+    <ContentView.Content>
+        <Grid x:Name="grd_Main">
+            <StackLayout>
+
+                <Entry x:Name="tb_Command" VerticalOptions="Start" Placeholder="COMMAND" Margin="5, 0, 5, 0"
+                       HorizontalTextAlignment="Center"></Entry>
+                <Button x:Name="tnTest" Clicked="tnTest_Clicked" Text="Send" Margin="5"></Button>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                    <Button x:Name="btn_TEMP" Text="T°" Clicked="btn_TEMP_Clicked"></Button>
+                    <Button x:Name="btn_SETDATE" Text="SD" Clicked="btn_SETDATE_Clicked"></Button>
+                    <Button x:Name="btn_DATE" Text="D" Clicked="btn_DATE_Clicked"></Button>
+                    <Button x:Name="btn_LIGHT" Text="L" Clicked="btn_LIGHT_Clicked"></Button>
+                </StackLayout>
+
+            </StackLayout>
+
+        </Grid>
+
+    </ContentView.Content>
+</ContentView>
