@@ -5,7 +5,7 @@
 
     <Frame x:Name="frm_Main" HasShadow="True" BorderColor="LightGray">
         <Frame.GestureRecognizers>
-            <TapGestureRecognizer Tapped="frm_Main_Tapped"/>
+            <TapGestureRecognizer Tapped="frm_Tapped"/>
         </Frame.GestureRecognizers>
         <StackLayout>
             <ContentPresenter x:Name="stk_Title">
