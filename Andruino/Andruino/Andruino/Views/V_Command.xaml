@@ -3,24 +3,117 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:Andruino.Views"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-             x:Class="Andruino.Views.V_Command">
+             x:Class="Andruino.Views.V_Command" VerticalOptions="CenterAndExpand">
     <ContentView.Content>
         <Grid x:Name="grd_Main">
-            <StackLayout>
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="grd_Main_Tapped"></TapGestureRecognizer>
+            </Grid.GestureRecognizers>
+            
+            
+            <ffimageloading:CachedImage x:Name="img_background" DownsampleToViewSize="True" 
+                                   HeightRequest="150" WidthRequest="150" Aspect="AspectFit" 
+                                   VerticalOptions="Center" HorizontalOptions="Center" 
+                                   Opacity="0.2" Source="command.png"/>
+            
+            <StackLayout  VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand">
+                
+                <StackLayout x:Name="stk_Send" Orientation="Horizontal">
 
-                <Entry x:Name="tb_Command" VerticalOptions="Start" Placeholder="COMMAND" Margin="5, 0, 5, 0"
-                       HorizontalTextAlignment="Center"></Entry>
-                <Button x:Name="tnTest" Clicked="tnTest_Clicked" Text="Send" Margin="5"></Button>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                    <Button x:Name="btn_TEMP" Text="T°" Clicked="btn_TEMP_Clicked"></Button>
-                    <Button x:Name="btn_SETDATE" Text="SD" Clicked="btn_SETDATE_Clicked"></Button>
-                    <Button x:Name="btn_DATE" Text="D" Clicked="btn_DATE_Clicked"></Button>
-                    <Button x:Name="btn_LIGHT" Text="L" Clicked="btn_LIGHT_Clicked"></Button>
+                    <Entry x:Name="tb_Command" VerticalOptions="Start" Placeholder="command" Margin="5, 0, 5, 0"
+                            HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand"></Entry>
+
+                    <Frame x:Name="frm_Send" HorizontalOptions="End" VerticalOptions="Center" Margin="10" Padding="0"
+                            WidthRequest="40" HeightRequest="40" BackgroundColor="Transparent">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Send_Tapped"/>
+                        </Frame.GestureRecognizers>
+                        <ffimageloading:CachedImage WidthRequest="35" HeightRequest="35"
+			                        DownsampleToViewSize="true" Aspect="AspectFit"
+			                        Source = "btnOK.png">
+                        </ffimageloading:CachedImage>
+                    </Frame>
+                
                 </StackLayout>
 
+                
+                <StackLayout x:Name="stkCommands" Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+
+                    <StackLayout>
+                        <Frame x:Name="frm_TEMP" HorizontalOptions="Center" VerticalOptions="Center" Margin="10" Padding="0"
+                            WidthRequest="50" HeightRequest="50" BackgroundColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TEMP_Tapped"/>
+                            </Frame.GestureRecognizers>
+                            <ffimageloading:CachedImage WidthRequest="50" HeightRequest="50"
+			                        DownsampleToViewSize="true" Aspect="AspectFit"
+			                        Source = "btnF.png">
+                            </ffimageloading:CachedImage>
+                        </Frame>
+                        <Label x:Name="lbl_TEMP" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                               Text="Température" IsVisible="False" FontSize="Micro" FontAttributes="Bold"></Label>
+                    </StackLayout>
+
+                    <StackLayout>
+                        <Frame x:Name="frm_DATE" HorizontalOptions="Center" VerticalOptions="Center" Margin="10" Padding="0"
+                            WidthRequest="50" HeightRequest="50" BackgroundColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="DATE_Tapped"/>
+                            </Frame.GestureRecognizers>
+                            <ffimageloading:CachedImage WidthRequest="50" HeightRequest="50"
+			                        DownsampleToViewSize="true" Aspect="AspectFit"
+			                        Source = "btnA.png">
+                            </ffimageloading:CachedImage>
+                        </Frame>
+                        <Label x:Name="lbl_DATE" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                               Text="Date de l'Arduino" IsVisible="False" FontSize="Micro" FontAttributes="Bold"></Label>
+                    </StackLayout>
+
+                    <StackLayout>
+                        <Frame x:Name="frm_SETDATE" HorizontalOptions="Center" VerticalOptions="Center" Margin="10" Padding="0"
+                            WidthRequest="50" HeightRequest="50" BackgroundColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="SETDATE_Tapped"/>
+                            </Frame.GestureRecognizers>
+                            <ffimageloading:CachedImage WidthRequest="50" HeightRequest="50"
+			                        DownsampleToViewSize="true" Aspect="AspectFit"
+			                        Source = "btnW.png">
+                            </ffimageloading:CachedImage>
+                        </Frame>
+                        <Label x:Name="lbl_SETDATE" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                               Text="Synchroniser la date" IsVisible="False" FontSize="Micro" FontAttributes="Bold"></Label>
+                    </StackLayout>
+
+                    <StackLayout>
+                        <Frame x:Name="frm_LIGHT" HorizontalOptions="Center" VerticalOptions="Center" Margin="10" Padding="0"
+                            WidthRequest="50" HeightRequest="50" BackgroundColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="LIGHT_Tapped"/>
+                            </Frame.GestureRecognizers>
+                            <ffimageloading:CachedImage WidthRequest="50" HeightRequest="50"
+			                        DownsampleToViewSize="true" Aspect="AspectFit"
+			                        Source = "btnX.png">
+                            </ffimageloading:CachedImage>
+                        </Frame>
+                        <Label x:Name="lbl_LIGHT" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                               Text="Niveau de luminosité" IsVisible="False" FontSize="Micro" FontAttributes="Bold"></Label>
+                    </StackLayout>
+
+                    
+                </StackLayout>
+            
             </StackLayout>
 
-        </Grid>
+            <Frame x:Name="frm_ImgTitle" HorizontalOptions="Center" VerticalOptions="Start" Margin="5" Padding="0" BackgroundColor="Transparent">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Title_Tapped"/>
+                </Frame.GestureRecognizers>
+                <ffimageloading:CachedImage x:Name="img_Date" WidthRequest="40" HeightRequest="40"
+			                        DownsampleToViewSize="true"
+			                        Source = "command.png">
+                </ffimageloading:CachedImage>
+            </Frame>
 
+        </Grid>
     </ContentView.Content>
 </ContentView>

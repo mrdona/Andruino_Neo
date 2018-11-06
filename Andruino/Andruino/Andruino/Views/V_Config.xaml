@@ -1,22 +1,52 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Andruino.Views.V_Config">
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Class="Andruino.Views.V_Config" VerticalOptions="CenterAndExpand">
   <ContentView.Content>
-      <StackLayout>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="5">
-                <Label Text="Local IP : " VerticalOptions="Center"></Label>
-                <Entry x:Name="lbl_IP" Text="{Binding LocalIP}" Keyboard="Numeric" Placeholder="Local IP" 
-                       HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" Focused="lbl_IP_Focused"></Entry>
+        <Grid x:Name="grd_Main">
+            <ffimageloading:CachedImage x:Name="img_background" DownsampleToViewSize="True" 
+                                   HeightRequest="150" WidthRequest="150" Aspect="AspectFit" 
+                                   VerticalOptions="Center" HorizontalOptions="Center" 
+                                   Opacity="0.2" Source="btnSettings.png"/>
+
+            <StackLayout>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" Margin="5">
+                    <Label Text="Local IP : " VerticalOptions="Center"></Label>
+                    <Label x:Name="lbl_IP" Text="{Binding LocalIP}" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center"></Label>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="5">
+                    <Label Text="Server IP : "  VerticalOptions="Center"></Label>
+                    <Entry x:Name="lbl_IPServer" Text="{Binding ServerIP}" Keyboard="Numeric" Placeholder="Server IP"
+                            HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" IsEnabled="{Binding NotAutoPing}"></Entry>
+                    <Label Text=":"  VerticalOptions="Center"></Label>
+                    <Entry x:Name="lbl_PortServer" Text="{Binding ServerPort}" Keyboard="Numeric" Placeholder="Server Port" 
+                            HorizontalTextAlignment="Center" IsEnabled="{Binding NotAutoPing}"></Entry>
+                    <Switch x:Name="sw_PingServer" IsToggled="{Binding AutoPing}"></Switch>
+                </StackLayout>
             </StackLayout>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="5">
-                <Label Text="Server IP : "  VerticalOptions="Center"></Label>
-                <Entry x:Name="lbl_IPServer" Text="{Binding ServerIP}" Keyboard="Numeric" Placeholder="Server IP"
-                       HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center"></Entry>
-                <Label Text=":"  VerticalOptions="Center"></Label>
-                <Entry x:Name="lbl_PortServer" Text="{Binding ServerPort}" Keyboard="Numeric" Placeholder="Server Port" 
-                       HorizontalTextAlignment="Center"></Entry>
-            </StackLayout>
-        </StackLayout>
-  </ContentView.Content>
+        
+            <Frame x:Name="frm_Ping" HorizontalOptions="Start" VerticalOptions="Start" Margin="5" Padding="0" BackgroundColor="Transparent"
+                    WidthRequest="40" HeightRequest="40">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Ping_Tapped"/>
+                </Frame.GestureRecognizers>
+                <ffimageloading:CachedImage x:Name="img_ServerSate" WidthRequest="40" HeightRequest="40"
+                                            Aspect="AspectFit" Source="connexionKO.png"
+			                                DownsampleToViewSize="true" CacheType="None">
+                </ffimageloading:CachedImage>
+            </Frame>
+
+            <Frame x:Name="frm_ImgTitle" HorizontalOptions="Center" VerticalOptions="Start" Margin="5" Padding="0" BackgroundColor="Transparent">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Title_Tapped"/>
+                </Frame.GestureRecognizers>
+                <ffimageloading:CachedImage x:Name="img_Date" WidthRequest="40" HeightRequest="40"
+			                        DownsampleToViewSize="true"
+			                        Source = "btnSettings.png">
+                </ffimageloading:CachedImage>
+            </Frame>
+
+        </Grid>
+    </ContentView.Content>
 </ContentView>

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -20,7 +21,28 @@ namespace Andruino.Views
 
             try
             {
+                frm_Error.BackgroundColor = Color.LightGray.MultiplyAlpha(0.7);
                 InitControls();
+            }
+            catch (Exception ex)
+            {
+                Manage_Error(ex);
+            }
+            finally
+            {
+                RunRefresh();
+            }
+        }
+
+        public async void RunRefresh()
+        {
+            try
+            {
+                while (true)
+                {
+                    RandomBackGround();
+                    await Task.Delay(10 * 1000);
+                }
             }
             catch (Exception ex)
             {
@@ -28,12 +50,11 @@ namespace Andruino.Views
             }
         }
 
-
         public void RandomBackGround()
         {
             try
             {
-                var rand = new Random().Next(0, 7);
+                var rand = new Random().Next(0, 18);
                 switch (rand)
                 {
                     case 0: img_background.Source = ImageSource.FromFile("badsmile.png"); break;
@@ -44,7 +65,20 @@ namespace Andruino.Views
                     case 5: img_background.Source = ImageSource.FromFile("icon.png"); break;
                     case 6: img_background.Source = ImageSource.FromFile("scorn.png"); break;
                     case 7: img_background.Source = ImageSource.FromFile("secretsmile.png"); break;
-                        //case 8: img_background.Source = ImageSource.FromFile("electricshock.png"); break;
+
+                    case 8: img_background.Source = ImageSource.FromFile("anger.png"); break;
+                    case 9: img_background.Source = ImageSource.FromFile("cry.png"); break;
+                    case 10: img_background.Source = ImageSource.FromFile("eyesdroped.png"); break;
+                    case 11: img_background.Source = ImageSource.FromFile("girl.png"); break;
+                    case 12: img_background.Source = ImageSource.FromFile("haha.png"); break;
+
+                    case 13: img_background.Source = ImageSource.FromFile("nothingtosay.png"); break;
+                    case 14: img_background.Source = ImageSource.FromFile("shame.png"); break;
+                    case 15: img_background.Source = ImageSource.FromFile("superman.png"); break;
+                    case 16: img_background.Source = ImageSource.FromFile("theironman.png"); break;
+                    case 17: img_background.Source = ImageSource.FromFile("what.png"); break;
+
+                    case 18: img_background.Source = ImageSource.FromFile("test.gif"); break;
                 }
             }
             catch (Exception ex)
@@ -69,35 +103,96 @@ namespace Andruino.Views
             {
                 controls = new ObservableCollection<View>();
 
-                var config = new uc_PinCard();
-                config.SetContent(new Views.V_Config() { IsEnabled = false });
-                config.Scale = 0.5;
-                config.Tapped += (o, e) => { frm_Tapped(o, e); };
-                config.UnPinTapped += (o, e) => { frm_UnPin(o, e); };
-                controls.Add(config);
-
-
                 var commands = new uc_PinCard();
-                commands.SetContent(new Views.V_Command() { IsEnabled = false });
+                commands.AddContent(new Views.V_Command() { IsEnabled = false });
                 commands.Scale = 0.5;
+                commands.AddTitleContent(new Label()
+                {
+                    Text = "Commandes",
+                    VerticalOptions = LayoutOptions.Center,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    FontAttributes = FontAttributes.Bold,
+                    FontSize = 18
+                });
                 commands.Tapped += (o, e) => { frm_Tapped(o, e); };
                 commands.UnPinTapped += (o, e) => { frm_UnPin(o, e); };
                 controls.Add(commands);
 
+                var log = new uc_PinCard();
+                log.AddContent(new Views.V_UDPLog() { IsEnabled = false });
+                log.Scale = 0.5;
+                log.AddTitleContent(new Label()
+                {
+                    Text = "Log",
+                    VerticalOptions = LayoutOptions.Center, VerticalTextAlignment = TextAlignment.Center,
+                    FontAttributes = FontAttributes.Bold,
+                    FontSize = 18
+                });
+                log.Tapped += (o, e) => { frm_Tapped(o, e); };
+                log.UnPinTapped += (o, e) => { frm_UnPin(o, e); };
+                controls.Add(log);
+
+                var config = new uc_PinCard();
+                config.AddContent(new Views.V_Config() { IsEnabled = false });
+                config.Scale = 0.5;
+                config.AddTitleContent(new Label()
+                {
+                    Text = "Configuration",
+                    VerticalOptions = LayoutOptions.Center,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    FontAttributes = FontAttributes.Bold,
+                    FontSize = 18
+                });
+                config.Tapped += (o, e) => { frm_Tapped(o, e); };
+                config.UnPinTapped += (o, e) => { frm_UnPin(o, e); };
+                controls.Add(config);
+
+                //var log2 = new V_UDPLog2();
+                //log2.Scale = 0.5;
+                //log2.SetTitleContent(new Label()
+                //{
+                //    Text = "Log2",
+                //    VerticalOptions = LayoutOptions.Center,
+                //    VerticalTextAlignment = TextAlignment.Center,
+                //    FontAttributes = FontAttributes.Bold,
+                //    FontSize = 18
+                //});
+                //log2.Tapped += (o, e) => { frm_Tapped(o, e); };
+                //log2.UnPinTapped += (o, e) => { frm_UnPin(o, e); };
+                //controls.Add(log2);
+
+                //var log2 = new uc_PinCard();
+                //log2.SetContent(new Views.V_UDPLog() { IsEnabled = false });
+                //log2.Scale = 0.5;
+                //log2.SetTitleContent(new Label()
+                //{
+                //    Text = "Log 2",
+                //    VerticalOptions = LayoutOptions.Center,
+                //    VerticalTextAlignment = TextAlignment.Center,
+                //    FontAttributes = FontAttributes.Bold,
+                //    FontSize = 18
+                //});
+                //log2.Tapped += (o, e) => { frm_Tapped(o, e); };
+                //log2.UnPinTapped += (o, e) => { frm_UnPin(o, e); };
+                //controls.Add(log2);
+
+
+
+
                 foreach (var c in controls)
                     ((uc_PinCard)c).IsMinimize = true;
 
-
+                carousel_Main.IsCyclical = true;
                 carousel_Main.ItemsSource = controls;
-                //carousel_Main.Children.Add(new IndicatorsControl() { BackgroundColor = Color.Aquamarine , VerticalOptions = LayoutOptions.Start });
-                carousel_Main.Children.Add(new LeftArrowControl());
-                carousel_Main.Children.Add(new RightArrowControl());
+                carousel_Main.Children.Add(new LeftArrowControl() { IsCyclical = true });
+                carousel_Main.Children.Add(new RightArrowControl() { IsCyclical = true });
             }
             catch (Exception ex)
             {
                 Manage_Error(ex);
             }
         }
+
 
         public void Manage_Error(Exception ex)
         {
@@ -106,8 +201,8 @@ namespace Andruino.Views
                 frm_Error.IsVisible = true;
                 lbl_Error.Text = ex.Message;
                 lbl_Error_Detail.Text = ex.TargetSite.Name + Environment.NewLine + ex.StackTrace;
-                grd_Main.IsEnabled = false;
-                grd_Main.Opacity = 0.4;
+                stk_Grid.IsEnabled = false;
+                stk_Grid.Opacity = 0.4;
             }
             catch (Exception subex)
             {
@@ -115,57 +210,83 @@ namespace Andruino.Views
             }
         }
 
-
+        bool _gifRunning = false;
         private void MainScreen_Tapped(object sender, EventArgs e)
         {
-            lbl_Error_Detail.IsVisible = false;
-            frm_Error.IsVisible = false;
-            grd_Main.IsEnabled = true;
-            grd_Main.Opacity = 1;
+            if(!frm_Error.IsVisible)
+            {
+                try
+                {
+                    if (img_gif.Source == null)
+                        img_gif.Source = ImageSource.FromFile("giro.gif");
+                    img_gif.IsVisible = !img_gif.IsVisible;
+                    if (_gifRunning) return;
 
-            if(AppLoadingAnimation.Source == null)
-                AppLoadingAnimation.Source = ImageSource.FromFile("giro.gif");
-            AppLoadingAnimation.IsVisible = !AppLoadingAnimation.IsVisible;
-            if(AppLoadingAnimation.IsVisible)
-                AppLoadingAnimation.ReloadImage();
+                    if (img_gif.IsVisible)
+                    {
+                        _gifRunning = true;
+                        img_gif.ReloadImage();
+                        img_gif.ScaleTo(0.1, 10 * 1000, Easing.CubicIn)
+                            .ContinueWith((a) =>
+                                Device.BeginInvokeOnMainThread(() =>
+                                {
+                                    img_gif.IsVisible = false;
+                                    img_gif.Scale = 1;
+                                    _gifRunning = false;
+                                }));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Manage_Error(ex);
+                }
+            }
 
+            if (frm_Error.IsVisible)
+            {
+                sv_Error_Detail.IsVisible = false;
+                frm_Error.IsVisible = false;
+                stk_Grid.IsEnabled = true;
+                stk_Grid.Opacity = 1;
+            }
         }
 
         private void frm_Error_Tapped(object sender, EventArgs e)
         {
-            lbl_Error_Detail.IsVisible = !lbl_Error_Detail.IsVisible;
+            sv_Error_Detail.IsVisible = !sv_Error_Detail.IsVisible;
+        }
+     
+        private void frm_Error_Detail_Close_Tapped(object sender, EventArgs e)
+        {
+            sv_Error_Detail.IsVisible = !sv_Error_Detail.IsVisible;
         }
 
-        private void img_Config_Tapped(object sender, EventArgs e)
+
+        private async void frm_Tapped(object sender, EventArgs e)
         {
             try
             {
-                uc_Config.IsVisible = !uc_Config.IsVisible;
-                img_Config.Source = uc_Config.IsVisible ? ImageSource.FromFile("optionsOff.png") : ImageSource.FromFile("optionsOn.png");
-            }
-            catch (Exception ex)
-            {
-                Manage_Error(ex);
-            }
-        }
+                if (controls_Pin != null && controls_Pin.Any(c => c == sender)) return;
 
-        
-        private void frm_Tapped(object sender, EventArgs e)
-        {
-            try
-            {
-                var o = controls.First(c => c == sender) as uc_PinCard;
-                var newO = new uc_PinCard(o.ViewContent) { IsMinimize = false };
-                controls.Add(newO);
-                newO.Tapped += (oo, ee) => { frm_Tapped(oo, ee); };
-                newO.UnPinTapped += (oo, ee) => { frm_UnPin(oo, ee); };
-                controls.Remove(o);
+                bool carouselWasOneOrNone = controls_UnPin != null ? controls_UnPin.Count() == 1 : true;
 
-                carousel_Main.ItemsSource = controls_UnPin != null ? controls_UnPin.ToList() : null;
+                if (sender.GetType() != typeof(V_UDPLog2))
+                {
+                    var o = controls.First(c => c == sender) as uc_PinCard;
+                    var newO = new uc_PinCard(o.ViewContent, o.ViewTitle) { IsMinimize = false };
+                    controls.Add(newO);
+                    newO.ViewContent.ForEach(c => c.IsEnabled = true);
+                    newO.Tapped += (oo, ee) => { frm_Tapped(oo, ee); };
+                    newO.UnPinTapped += (oo, ee) => { frm_UnPin(oo, ee); };
+                    controls.Remove(o);
+                }
+                else
+                    (controls.First(c => c == sender) as V_UDPLog2).IsMinimize = false;
 
-                stk_Main.Children.Clear();
-                foreach (var c in controls_Pin)
-                    stk_Main.Children.Add(c);
+                Refresh_Stacks(carouselWasOneOrNone);
+
+                if (carousel_Main.ItemsSource == null || carousel_Main.ItemsSource.Count == 0)
+                    CarrouselHide_Tapped(null, null);
             }
             catch (Exception ex)
             {
@@ -177,19 +298,49 @@ namespace Andruino.Views
         {
             try
             {
-                var o = controls.First(c => c == sender) as uc_PinCard;
-                var newO = new uc_PinCard(o.ViewContent) { IsMinimize = true, Scale = 0.6 };
-                controls.Add(newO);
-                newO.Tapped += (oo, ee) => { frm_Tapped(oo, ee); };
-                newO.UnPinTapped += (oo, ee) => { frm_UnPin(oo, ee); };
-                controls.Remove(o);
+                bool carouselWasOneOrNone = controls_UnPin != null ? controls_UnPin.Count() == 1 : true;
 
+                if (sender.GetType() != typeof(V_UDPLog2))
+                {
+                    var o = controls.First(c => c == sender) as uc_PinCard;
+                    var newO = new uc_PinCard(o.ViewContent, o.ViewTitle) { IsMinimize = true, Scale = 0.6 };
+                    controls.Add(newO);
+                    newO.ViewContent.ForEach(c => c.IsEnabled = false);
+                    newO.Tapped += (oo, ee) => { frm_Tapped(oo, ee); };
+                    newO.UnPinTapped += (oo, ee) => { frm_UnPin(oo, ee); };
+                    controls.Remove(o);
+                }
+                else
+                    (controls.First(c => c == sender) as uc_PinCard).IsMinimize = true;
+
+                Refresh_Stacks(carouselWasOneOrNone);
+            }
+            catch (Exception ex)
+            {
+                Manage_Error(ex);
+            }
+        }
+
+        private void Refresh_Stacks(bool wasOneOrNone)
+        {
+            try
+            {
                 carousel_Main.ItemsSource = controls_UnPin != null ? controls_UnPin.ToList() : null;
+                //Bug affichage flèches
+                if (wasOneOrNone && carousel_Main.ItemsSource != null && carousel_Main.ItemsSource.Count > 1)
+                {
+                    var arrows = carousel_Main.Children.Where(c => c.GetType() == typeof(ArrowControl));
+                    foreach (var a in arrows)
+                        carousel_Main.Children.Remove(a);
+
+                    carousel_Main.Children.Add(new LeftArrowControl() { IsCyclical = true });
+                    carousel_Main.Children.Add(new RightArrowControl() { IsCyclical = true });
+                }
 
                 stk_Main.Children.Clear();
-                if(controls_Pin != null)
+                if (controls_Pin != null)
                     foreach (var c in controls_Pin)
-                        stk_Main.Children.Add(c);
+                        try { stk_Main.Children.Add(c); } catch (Exception) { } //Bug Xamarin
             }
             catch (Exception ex)
             {
@@ -201,12 +352,32 @@ namespace Andruino.Views
         {
             try
             {
-                ((View)args.Item).Scale = 0.6;
+                if(args.Item != null)
+                    ((View)args.Item).Scale = 0.6;
             }
             catch (Exception ex)
             {
                 Manage_Error(ex);
             }
         }
+
+        private async void CarrouselHide_Tapped(object sender, EventArgs e)
+        {
+            try
+            {
+                await carousel_Main.ScaleTo(0.5, 250);
+                carousel_Main.IsVisible = !carousel_Main.IsVisible;
+                if (!carousel_Main.IsVisible)
+                    await img_Carrousel_Tapped.RotateTo(90, 150);
+                else
+                    await img_Carrousel_Tapped.RotateTo(270, 150);
+                await carousel_Main.ScaleTo(1);
+            }
+            catch (Exception ex)
+            {
+                ((Views.MainPage)App.Current.MainPage).Manage_Error(ex);
+            }
+        }
+
     }
 }

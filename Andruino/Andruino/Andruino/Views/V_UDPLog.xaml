@@ -2,22 +2,65 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-             x:Class="Andruino.Views.V_UDPLog">
-  <ContentView.Content>
-      <Grid>
+             xmlns:xf="clr-namespace:Xamarin.Forms"
+             x:Class="Andruino.Views.V_UDPLog" VerticalOptions="Start">
+    <ContentView.Content>
+        <Grid x:Name="grd_Main" VerticalOptions="Start">
+            <ffimageloading:CachedImage x:Name="img_background" DownsampleToViewSize="True" 
+                                   HeightRequest="150" WidthRequest="150" Aspect="AspectFit" 
+                                   VerticalOptions="Center" HorizontalOptions="Center" 
+                                   Opacity="0.2" Source="btnDate.png"/>
+
             <ScrollView>
-                <StackLayout x:Name="stk_Log"></StackLayout>
+                <!--<ListView x:Name="stk_Log" HorizontalOptions="Start"
+                        VerticalOptions="Start" Margin="2" HasUnevenRows="True" SeparatorVisibility="None"
+                        ItemSelected="stk_Log_ItemSelected">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Label Text="{Binding}" HorizontalOptions="StartAndExpand" FontSize="Micro"></Label>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>-->
+                <StackLayout x:Name="stk_Log" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
+                </StackLayout>
             </ScrollView>
-            <Frame HorizontalOptions="End" VerticalOptions="Start" Margin="10" Padding="0"
-                WidthRequest="30" HeightRequest="30" BackgroundColor="Transparent">
-                <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Clear_Tapped"/>
-                </Frame.GestureRecognizers>
-                <ffimageloading:CachedImage WidthRequest="40" HeightRequest="40"
+
+
+            <StackLayout HorizontalOptions="End" VerticalOptions="End" Margin="10">
+                <Frame x:Name="frm_Reverse" Padding="0" WidthRequest="30" HeightRequest="30" BackgroundColor="Transparent">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Reverse_Tapped"/>
+                    </Frame.GestureRecognizers>
+                    <ffimageloading:CachedImage x:Name="img_Revert" WidthRequest="30" HeightRequest="30"
+			                        DownsampleToViewSize="true"
+			                        Source = "arrowleft.png" Rotation="90">
+                    </ffimageloading:CachedImage>
+                </Frame>
+
+                <Frame x:Name="frm_Clear" Padding="0" WidthRequest="30" HeightRequest="30" BackgroundColor="Transparent">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Clear_Tapped"/>
+                    </Frame.GestureRecognizers>
+                    <ffimageloading:CachedImage x:Name="img_Clear" WidthRequest="30" HeightRequest="30"
 			                        DownsampleToViewSize="true"
 			                        Source = "reloadOn.png">
+                    </ffimageloading:CachedImage>
+                </Frame>
+            </StackLayout>
+           
+
+            <Frame x:Name="frm_ImgTitle" HorizontalOptions="Center" VerticalOptions="Start" Margin="5" Padding="0" BackgroundColor="Transparent">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Title_Tapped"/>
+                </Frame.GestureRecognizers>
+                <ffimageloading:CachedImage x:Name="img_Date" WidthRequest="40" HeightRequest="40"
+			                        DownsampleToViewSize="true"
+			                        Source = "btnDate.png">
                 </ffimageloading:CachedImage>
             </Frame>
+
         </Grid>
-  </ContentView.Content>
+    </ContentView.Content>
 </ContentView>

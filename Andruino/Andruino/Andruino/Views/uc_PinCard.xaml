@@ -2,31 +2,35 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-             x:Class="Andruino.Views.uc_PinCard" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+             x:Class="Andruino.Views.uc_PinCard" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+             BackgroundColor="Transparent">
 
     <Frame x:Name="frm_Main" HasShadow="True" Padding="5" BorderColor="LightGray">
         <Frame.GestureRecognizers>
             <TapGestureRecognizer Tapped="frm_Tapped"/>
         </Frame.GestureRecognizers>
-        <StackLayout>
-           
-            <StackLayout x:Name="stk_Title" Orientation="Horizontal" HorizontalOptions="EndAndExpand" VerticalOptions="Start">
-                <Frame HorizontalOptions="End" VerticalOptions="Start" Margin="5" Padding="0"
-                        WidthRequest="30" HeightRequest="30" BackgroundColor="Transparent">
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="UnPin_Tapped"/>
-                    </Frame.GestureRecognizers>
-                    <ffimageloading:CachedImage WidthRequest="40" HeightRequest="40"
-			                            DownsampleToViewSize="true"
-			                            Source = "addOn.png" Rotation="45">
-                    </ffimageloading:CachedImage>
-                </Frame>
+        <Grid>
+            <StackLayout>
+
+                <StackLayout x:Name="stk_Title_Content" HorizontalOptions="FillAndExpand" VerticalOptions="Center" Margin="0,0,50,0"
+                         Orientation="Horizontal">
+                </StackLayout>
+
+                <StackLayout x:Name="stk_Content" HorizontalOptions="Center" VerticalOptions="Start">
+                </StackLayout>
+
             </StackLayout>
             
-            <StackLayout x:Name="stk_Content" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-            </StackLayout>
-        
-        </StackLayout>
+            <Frame x:Name="frm_Close" HorizontalOptions="End" VerticalOptions="Start" Margin="5" Padding="0" BackgroundColor="Transparent">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="UnPin_Tapped"/>
+                </Frame.GestureRecognizers>
+                <ffimageloading:CachedImage WidthRequest="30" HeightRequest="30"
+			                            DownsampleToViewSize="true"
+			                            Source = "addOn.png" Rotation="45">
+                </ffimageloading:CachedImage>
+            </Frame>
+        </Grid>
 
     </Frame>
     
