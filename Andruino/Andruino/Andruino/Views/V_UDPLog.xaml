@@ -6,6 +6,10 @@
              x:Class="Andruino.Views.V_UDPLog" VerticalOptions="Start">
     <ContentView.Content>
         <Grid x:Name="grd_Main" VerticalOptions="Start">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="grd_Main_Tapped"></TapGestureRecognizer>
+            </Grid.GestureRecognizers>
+
             <ffimageloading:CachedImage x:Name="img_background" DownsampleToViewSize="True" 
                                    HeightRequest="150" WidthRequest="150" Aspect="AspectFit" 
                                    VerticalOptions="Center" HorizontalOptions="Center" 
@@ -24,18 +28,21 @@
                     </ListView.ItemTemplate>
                 </ListView>-->
                 <StackLayout x:Name="stk_Log" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="stk_Log_Tapped"></TapGestureRecognizer>
+                    </StackLayout.GestureRecognizers>
                 </StackLayout>
             </ScrollView>
 
 
-            <StackLayout HorizontalOptions="End" VerticalOptions="End" Margin="10">
+            <StackLayout x:Name="stk_LogOptions" HorizontalOptions="End" VerticalOptions="End" Margin="10" IsVisible="False">
                 <Frame x:Name="frm_Reverse" Padding="0" WidthRequest="30" HeightRequest="30" BackgroundColor="Transparent">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="Reverse_Tapped"/>
                     </Frame.GestureRecognizers>
                     <ffimageloading:CachedImage x:Name="img_Revert" WidthRequest="30" HeightRequest="30"
 			                        DownsampleToViewSize="true"
-			                        Source = "arrowleft.png" Rotation="90">
+			                        Source = "arrowdoubleleft.png" Rotation="90">
                     </ffimageloading:CachedImage>
                 </Frame>
 
@@ -51,14 +58,42 @@
             </StackLayout>
            
 
+            <StackLayout x:Name="stk_TextOptions" Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="Start" IsVisible="False">
+                <Frame x:Name="frm_FontUp" HorizontalOptions="Center" VerticalOptions="Start" Margin="5" Padding="0" BackgroundColor="Transparent">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="FontUp_Tapped"/>
+                    </Frame.GestureRecognizers>
+                    <ffimageloading:CachedImage x:Name="img_FontUp" WidthRequest="40" HeightRequest="40"
+			                        DownsampleToViewSize="true"
+			                        Source = "fontsizeup.png">
+                    </ffimageloading:CachedImage>
+                </Frame>
+
+                <Frame x:Name="frm_FontDown" HorizontalOptions="Center" VerticalOptions="Start" Margin="5" Padding="0" BackgroundColor="Transparent">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="FontDown_Tapped"/>
+                    </Frame.GestureRecognizers>
+                    <ffimageloading:CachedImage x:Name="img_FontDown" WidthRequest="40" HeightRequest="40"
+			                        DownsampleToViewSize="true"
+			                        Source = "fontsizedown.png">
+                    </ffimageloading:CachedImage>
+                </Frame>
+            </StackLayout>
+
+            
             <Frame x:Name="frm_ImgTitle" HorizontalOptions="Center" VerticalOptions="Start" Margin="5" Padding="0" BackgroundColor="Transparent">
                 <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Title_Tapped"/>
+                    <TapGestureRecognizer Tapped="grd_Main_Tapped"/>
                 </Frame.GestureRecognizers>
-                <ffimageloading:CachedImage x:Name="img_Date" WidthRequest="40" HeightRequest="40"
+                <StackLayout Orientation="Horizontal">
+                    <ffimageloading:CachedImage x:Name="img_ImgTitle" WidthRequest="40" HeightRequest="40"
 			                        DownsampleToViewSize="true"
 			                        Source = "btnDate.png">
-                </ffimageloading:CachedImage>
+                    </ffimageloading:CachedImage>
+                    <Label x:Name="lbl_Info_Title" HorizontalOptions="Start" VerticalOptions="Center" HorizontalTextAlignment="Start" VerticalTextAlignment="Center"
+                               Text="Log" IsVisible="False" FontSize="Medium" FontAttributes="Bold" Focused="grd_Main_Tapped">
+                    </Label>
+                </StackLayout>
             </Frame>
 
         </Grid>

@@ -8,6 +8,9 @@ using Xamarin.Forms;
 
 namespace Andruino.ViewModels
 {
+    /// <summary>
+    /// View Model Stock Xamarin
+    /// </summary>
     public class BaseViewModel : INotifyPropertyChanged
     {
         //public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>() ?? new MockDataStore();

@@ -2,21 +2,23 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-             x:Class="Andruino.Views.uc_PinCard" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+             x:Class="Andruino.Views.uc_PinCard" 
+             HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
              BackgroundColor="Transparent">
 
-    <Frame x:Name="frm_Main" HasShadow="True" Padding="5" BorderColor="LightGray">
+    <Frame x:Name="frm_Main" HasShadow="True" Padding="5" BorderColor="LightGray" BackgroundColor="Transparent"
+           HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
         <Frame.GestureRecognizers>
             <TapGestureRecognizer Tapped="frm_Tapped"/>
         </Frame.GestureRecognizers>
-        <Grid>
-            <StackLayout>
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
+            <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
 
                 <StackLayout x:Name="stk_Title_Content" HorizontalOptions="FillAndExpand" VerticalOptions="Center" Margin="0,0,50,0"
                          Orientation="Horizontal">
                 </StackLayout>
 
-                <StackLayout x:Name="stk_Content" HorizontalOptions="Center" VerticalOptions="Start">
+                <StackLayout x:Name="stk_Content" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
                 </StackLayout>
 
             </StackLayout>

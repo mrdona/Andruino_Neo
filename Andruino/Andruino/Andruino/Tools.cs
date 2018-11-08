@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
+using Xamarin.Forms;
 
 namespace Andruino
 {
     public static class Tools
     {
-        public static T ParentPinCard<T>(Xamarin.Forms.View child) where T : new()
+        public static T GetParent<T>(Xamarin.Forms.View child) where T : new()
         {
             try
             {
@@ -20,6 +22,106 @@ namespace Andruino
                 ((Views.MainPage)App.Current.MainPage).Manage_Error(ex);
             }
             return new T();
+        }
+
+        public static string GetHexString(Xamarin.Forms.Color color)
+        {
+            var red = (int)(color.R * 255);
+            var green = (int)(color.G * 255);
+            var blue = (int)(color.B * 255);
+            var alpha = (int)(color.A * 255);
+            var hex = $"#{alpha:X2}{red:X2}{green:X2}{blue:X2}";
+
+            return hex;
+        }
+
+        public static double Scalevalue(double value, int min, int max, int minScale, int maxScale)
+        {
+            double scaled = minScale + (double)(value - min) / (max - min) * (maxScale - minScale);
+            return scaled;
+        }
+
+        public static List<VisualElement> GetAllChildren(VisualElement source)
+        {
+            List<VisualElement> ret = new List<VisualElement>();
+
+            try
+            {
+                if (source != null)
+                {
+                    ContentView contentView = source as ContentView;
+                    if (contentView != null)
+                    {
+                        ret.Add(contentView.Content);
+                        foreach (View view in GetAllChildren(contentView))
+                            ret.Add(view);
+
+                    }
+                    else
+                    {
+                        Layout<View> viewLayout = source as Layout<View>;
+                        if (viewLayout != null)
+                        {
+                            foreach (View child in viewLayout.Children)
+                            {
+                                ret.Add(child);
+                                foreach (View view in GetAllChildren(child))
+                                    ret.Add(view);
+                            }
+                        }
+                        else
+                        {
+                            ContentPage contentPage = source as ContentPage;
+                            if (contentPage != null)
+                            {
+                                ret.Add(contentPage.Content);
+                                foreach (View view in GetAllChildren(contentPage.Content))
+                                    ret.Add(view);
+                            }
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            return ret;
+        }
+
+
+        public class StringToColorConverter : IValueConverter
+        {
+            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                if (value == null)
+                    return Color.Default;
+
+                string valueAsString = value.ToString();
+                switch (valueAsString)
+                {
+                    case (""):
+                        {
+                            return Color.Default;
+                        }
+                    case ("Accent"):
+                        {
+                            return Color.Accent;
+                        }
+                    default:
+                        {
+                            var converter = new ColorTypeConverter();
+                            var result = converter.ConvertFromInvariantString(valueAsString);
+                            return result;
+                        }
+                }
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                return null;
+            }
+
         }
     }
 }

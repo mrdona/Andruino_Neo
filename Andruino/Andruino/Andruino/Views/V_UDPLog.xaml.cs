@@ -31,12 +31,11 @@ namespace Andruino.Views
             try
             {
                 if (_PinParent != null) return;
-                _PinParent = Tools.ParentPinCard<uc_PinCard>(this);
+                _PinParent = Tools.GetParent<uc_PinCard>(this);
                 if (_PinParent != null)
                 {
                     grd_Main.Children.Remove(frm_ImgTitle);
                     frm_ImgTitle.HorizontalOptions = LayoutOptions.Start;
-                    frm_ImgTitle.WidthRequest = frm_ImgTitle.HeightRequest = 40;
                     _PinParent.AddTitleContent(frm_ImgTitle);
 
                     //grd_Main.Children.Remove(frm_Reverse);
@@ -60,7 +59,13 @@ namespace Andruino.Views
                                     : ViewModels.VM_UDPReceiver.Instance.Log.Take(10);
             stk_Log.Children.Clear();
             foreach (var log in current)
-                stk_Log.Children.Add(new Label() { Text = log, FontSize = 8, HorizontalOptions = LayoutOptions.StartAndExpand, HorizontalTextAlignment = TextAlignment.Start });
+                stk_Log.Children.Add(new Label()
+                {
+                    Text = log,
+                    FontSize = Device.GetNamedSize((NamedSize)currentLogFontSize, typeof(Label)),
+                    HorizontalOptions = LayoutOptions.StartAndExpand,
+                    HorizontalTextAlignment = TextAlignment.Start
+                });
 
         }
 
@@ -68,7 +73,7 @@ namespace Andruino.Views
         {
             ViewModels.VM_UDPReceiver.Instance.Log.Clear();
             stk_Log.Children.Clear();
-            ((MainPage)App.Current.MainPage).RandomBackGround();
+            //((MainPage)App.Current.MainPage).RandomBackGround();
         }
 
         bool _revert = false;
@@ -87,13 +92,19 @@ namespace Andruino.Views
             //stk_Log.SelectedItem = null;
         }
 
-        private async void Title_Tapped(object sender, EventArgs e)
+        int currentLogFontSize = 1;
+        private async void FontUp_Tapped(object sender, EventArgs e)
         {
             try
             {
-                frm_ImgTitle.IsEnabled = false;
-                await frm_ImgTitle.ScaleTo(0.5, 250).ContinueWith(a => frm_ImgTitle.ScaleTo(1, 100));
-                frm_ImgTitle.IsEnabled = true;
+                if (currentLogFontSize == 4) return;
+                currentLogFontSize++;
+                //var x = Enum.GetName(typeof(NamedSize), currentLogFontSize);
+                frm_FontUp.IsEnabled = false;
+                foreach (var lbl in stk_Log.Children)
+                    ((Label)lbl).FontSize = Device.GetNamedSize((NamedSize)currentLogFontSize, typeof(Label));
+                await frm_FontUp.ScaleTo(0.5, 250).ContinueWith(a => frm_FontUp.ScaleTo(1, 100));
+                frm_FontUp.IsEnabled = true;
             }
             catch (Exception ex)
             {
@@ -101,6 +112,70 @@ namespace Andruino.Views
             }
         }
 
+        private async void FontDown_Tapped(object sender, EventArgs e)
+        {
+            try
+            {
+                if (currentLogFontSize == 1) return;
+                currentLogFontSize--;
+                //var x = Enum.GetName(typeof(NamedSize), currentLogFontSize);
+                frm_FontDown.IsEnabled = false;
+                foreach (var lbl in stk_Log.Children)
+                    ((Label)lbl).FontSize = Device.GetNamedSize((NamedSize)currentLogFontSize, typeof(Label));
+                await frm_FontDown.ScaleTo(0.5, 250).ContinueWith(a => frm_FontDown.ScaleTo(1, 100));
+                frm_FontDown.IsEnabled = true;
+            }
+            catch (Exception ex)
+            {
+                ((Views.MainPage)App.Current.MainPage).Manage_Error(ex);
+            }
+        }
+
+        private async void stk_Log_Tapped(object sender, EventArgs e)
+        {
+            try
+            {
+                await stk_Log.ScaleTo(0.9, 150).ContinueWith(async a => await stk_Log.ScaleTo(1, 75));
+                stk_LogOptions.IsVisible = stk_TextOptions.IsVisible = !stk_TextOptions.IsVisible;
+            }
+            catch (Exception ex)
+            {
+                ((Views.MainPage)App.Current.MainPage).Manage_Error(ex);
+            }
+        }
+
+        private async void grd_Main_Tapped(object sender, EventArgs e)
+        {
+            try
+            {
+                await stk_Log.ScaleTo(0.9, 150).ContinueWith(async a => await stk_Log.ScaleTo(1, 75));
+                stk_LogOptions.IsVisible = stk_TextOptions.IsVisible = !stk_TextOptions.IsVisible;
+                Title_Tapped(null, null);
+            }
+            catch (Exception ex)
+            {
+                ((Views.MainPage)App.Current.MainPage).Manage_Error(ex);
+            }
+        }
+
+        private async void Title_Tapped(object sender, EventArgs e)
+        {
+            try
+            {
+                frm_ImgTitle.IsEnabled = false;
+                await frm_ImgTitle.ScaleTo(0.5, 250).ContinueWith(async a => await frm_ImgTitle.ScaleTo(1, 100));
+
+                lbl_Info_Title.IsVisible = !lbl_Info_Title.IsVisible;
+                lbl_Info_Title.Opacity = 0;
+                await lbl_Info_Title.FadeTo(1, 750);
+
+                frm_ImgTitle.IsEnabled = true;
+            }
+            catch (Exception ex)
+            {
+                ((Views.MainPage)App.Current.MainPage).Manage_Error(ex);
+            }
+        }
     }
 
     #region test héritage uc_PinCard
@@ -158,7 +233,7 @@ namespace Andruino.Views
         private void Clear_Tapped(View sender, object e)
         {
             stk_Log.Children.Clear();
-            ((MainPage)App.Current.MainPage).RandomBackGround();
+            //((MainPage)App.Current.MainPage).RandomBackGround();
         }
     }
     #endregion

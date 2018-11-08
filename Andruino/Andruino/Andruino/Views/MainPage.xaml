@@ -1,32 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-            xmlns:views="clr-namespace:Andruino.Views"
-            xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:Andruino.Views"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:cards="clr-namespace:PanCardView;assembly=PanCardView"
-             xmlns:controls="clr-namespace:PanCardView.Controls;assembly=PanCardView"
-             x:Class="Andruino.Views.MainPage">
+             x:Class="Andruino.Views.MainPage"
+             Title="Andruino">
 
-    <Grid>
+    <Grid x:Name="grd_Main">
         <Grid.GestureRecognizers>
             <TapGestureRecognizer Tapped="MainScreen_Tapped"/>
         </Grid.GestureRecognizers>
 
-        <ffimageloading:CachedImage DownsampleToViewSize="True" Aspect="Fill" Margin="-10"
+        <!--design haut de page-->
+        <ffimageloading:CachedImage x:Name="img_backgroundTop" DownsampleToViewSize="True" Aspect="Fill" Margin="-10"
                                    VerticalOptions="Start" HorizontalOptions="FillAndExpand" 
                                    Source="backgroundTitle.png"/>
 
+        <!--image animée-->
         <ffimageloading:CachedImage x:Name="img_gif" DownsampleToViewSize="True" 
                                    HeightRequest="150" WidthRequest="150" IsVisible="False" 
-                                   VerticalOptions="Center" HorizontalOptions="Center" 
-                                   Opacity="0.2"/>
+                                   VerticalOptions="End" HorizontalOptions="Center" 
+                                   Opacity="0.2" Margin="30"/>
 
+        <!--tête de l'arduino-->
         <ffimageloading:CachedImage x:Name="img_background" HorizontalOptions="Start" VerticalOptions="Start"
 			                        DownsampleToViewSize="true" WidthRequest="50" HeightRequest="50" Margin="20"
 			                        Source = "icon.png">
-            
+
         </ffimageloading:CachedImage>
 
+        <!--frame d'erreur-->
         <Frame x:Name="frm_Error" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Margin="5" Padding="5"
                    BackgroundColor="Transparent" IsVisible="False" BorderColor="OrangeRed" CornerRadius="10" HasShadow="True">
             <Frame.GestureRecognizers>
@@ -42,6 +46,8 @@
                     <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
+                
+                <!--image erreur-->
                 <Frame Grid.Column="0" Grid.Row="0" BorderColor="Yellow" BackgroundColor="OrangeRed" CornerRadius="10" WidthRequest="50" HeightRequest="50"
                         Padding="0">
                     <ffimageloading:CachedImage WidthRequest="48" HeightRequest="48"
@@ -50,11 +56,14 @@
                     </ffimageloading:CachedImage>
                 </Frame>
 
+                <!--Exception.Message : lbl_Error-->
                 <Label Grid.Column="1" Grid.Row="0" x:Name="lbl_Error" Text="lbl_Error" TextColor="OrangeRed" FontSize="Large" FontAttributes="Bold" 
                         HorizontalOptions="FillAndExpand" VerticalOptions="Center" VerticalTextAlignment="Center"></Label>
 
+                <!--Exception.StackTrace : lbl_Error_Detail-->
                 <Grid x:Name="sv_Error_Detail" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" 
                             HorizontalOptions="FillAndExpand" VerticalOptions="Center" IsVisible="False" >
+                    
                     <ScrollView Margin="10">
                         <Grid>
                             <Label x:Name="lbl_Error_Detail" Text="lbl_Error_Detail" TextColor="OrangeRed" FontSize="Small" FontAttributes="Bold" 
@@ -63,22 +72,26 @@
 
                         </Grid>
                     </ScrollView>
+                    
                     <Frame Padding="0" HorizontalOptions="End" VerticalOptions="End" BackgroundColor="Transparent">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Tapped="frm_Error_Detail_Close_Tapped"/>
                         </Frame.GestureRecognizers>
                         <ffimageloading:CachedImage WidthRequest="40" HeightRequest="40"
 			                        DownsampleToViewSize="true" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-			                        Source = "btnUp.png" BackgroundColor="Transparent">
+			                        Source = "arrowleft.png" Rotation="90" BackgroundColor="Transparent">
                         </ffimageloading:CachedImage>
                     </Frame>
+                
                 </Grid>
 
             </Grid>
         </Frame>
 
+        <!--conteneur principal-->
         <StackLayout x:Name="stk_Grid" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
 
+            <!--grid Carousel-->
             <Grid x:Name="grd_Carrousel" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
                 <Frame x:Name="frm_CarrouselHide" HorizontalOptions="End" VerticalOptions="Start" Margin="10" Padding="0" BackgroundColor="Transparent">
                     <Frame.GestureRecognizers>
@@ -94,13 +107,13 @@
                 </cards:CarouselView>
             </Grid>
 
+            <ScrollView>
+                <!--stack principal-->
+                <StackLayout x:Name="stk_Main" VerticalOptions="Start" HorizontalOptions="FillAndExpand" Padding="10"></StackLayout>
+            </ScrollView>
 
-            <StackLayout x:Name="stk_Main" VerticalOptions="Start" HorizontalOptions="FillAndExpand" Padding="10"></StackLayout>
         </StackLayout>
 
     </Grid>
-
-    
-
     
 </ContentPage>

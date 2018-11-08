@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Class="Andruino.Views.uc_LightChart">
+
+    <Grid x:Name="grd_Main">
+
+        <Grid.GestureRecognizers>
+            <TapGestureRecognizer Tapped="grd_Main_Tapped"></TapGestureRecognizer>
+        </Grid.GestureRecognizers>
+
+        <ffimageloading:CachedImage x:Name="img_background" DownsampleToViewSize="True" 
+                                   HeightRequest="150" WidthRequest="150" Aspect="AspectFit" 
+                                   VerticalOptions="Center" HorizontalOptions="Center" 
+                                   Opacity="0.2" Source="analyse.png"/>
+
+        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" Margin="10">
+            
+            <StackLayout x:Name="stk_Options" IsVisible="False">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="Center">
+                    <Label x:Name="lbl_SyncDelay" Text="Délai Synchro.: " VerticalOptions="Center"></Label>
+                    <Frame BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" VerticalOptions="Center"
+                           Padding="0" CornerRadius="1" BorderColor="Silver">
+                        <Slider x:Name="sl_delayLIGHT" Maximum="30" Minimum="1" Value="3" HorizontalOptions="FillAndExpand" VerticalOptions="Center"
+                                ValueChanged="sl_delayLIGHT_ValueChanged"/>
+                    </Frame>
+                </StackLayout>
+                <Picker x:Name="pck_Color" Title="Choix Couleur" HorizontalOptions="FillAndExpand"
+                        SelectedIndexChanged="pck_Color_SelectedIndexChanged"></Picker>
+                <Entry x:Name="tb_MaxPoints" Placeholder="Points Max" HorizontalOptions="FillAndExpand" VerticalOptions="Center"
+                       Keyboard="Numeric" TextChanged="tb_MaxPoints_TextChanged"></Entry>
+            </StackLayout>
+
+            <StackLayout x:Name="stk_LightChart" VerticalOptions="FillAndExpand" IsVisible="False">
+                <microcharts:ChartView x:Name="chartViewLIGHT" HeightRequest="125"/>
+            </StackLayout>
+
+            <Frame x:Name="frm_ImgRun" HorizontalOptions="Center" VerticalOptions="Center" Margin="5" Padding="0" BackgroundColor="Transparent">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Run_Tapped"/>
+                </Frame.GestureRecognizers>
+                <ffimageloading:CachedImage x:Name="img_Run" WidthRequest="50" HeightRequest="50"
+			                        DownsampleToViewSize="true"
+			                        Source = "btnX.png">
+                </ffimageloading:CachedImage>
+            </Frame>
+
+            <ProgressBar x:Name="prg_Sync" HorizontalOptions="FillAndExpand" IsVisible="False"></ProgressBar>
+        
+        </StackLayout>
+
+        <Frame x:Name="frm_ImgTitle" HorizontalOptions="Center" VerticalOptions="Start" Margin="5" Padding="0" BackgroundColor="Transparent" Opacity="0.5">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="Title_Tapped"/>
+            </Frame.GestureRecognizers>
+            <ffimageloading:CachedImage x:Name="img_Title" WidthRequest="40" HeightRequest="40"
+			                        DownsampleToViewSize="true"
+			                        Source = "btnX.png">
+            </ffimageloading:CachedImage>
+        </Frame>
+
+        <Frame x:Name="frm_CurrentLight" HorizontalOptions="Center" VerticalOptions="Start" Margin="5" Padding="0" BackgroundColor="Transparent">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="CurrentLight_Tapped"/>
+            </Frame.GestureRecognizers>
+            <Grid>
+                <ffimageloading:CachedImage x:Name="img_CurrentLight" WidthRequest="40" HeightRequest="40"
+			                        DownsampleToViewSize="true" Opacity="0.7" Aspect="AspectFit"
+			                        Source = "resultbackground.png">
+                </ffimageloading:CachedImage>
+                <Label x:Name="lbl_CurrentLight" FontAttributes="Bold" FontSize="Medium" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+                       VerticalOptions="Center" HorizontalOptions="Center"></Label>
+            </Grid>
+
+        </Frame>
+
+    </Grid>
+        
+</ContentView>

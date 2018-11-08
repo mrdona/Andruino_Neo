@@ -14,6 +14,8 @@ namespace Andruino.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class V_Command : ContentView
     {
+        string _currentCommandWaiting = string.Empty;
+
 
         public V_Command()
         {
@@ -21,7 +23,7 @@ namespace Andruino.Views
 
             try
             {
-                MessagingCenter.Subscribe<MainPage, string>(this, "Refresh", Refresh);
+                ViewModels.VM_UDPReceiver.Instance.GetResponse += Instance_GetResponse;
             }
             catch (Exception ex)
             {
@@ -36,13 +38,12 @@ namespace Andruino.Views
             try
             {
                 if (_PinParent != null) return;
-                _PinParent = Tools.ParentPinCard<uc_PinCard>(this);
+                _PinParent = Tools.GetParent<uc_PinCard>(this);
                 if (_PinParent != null)
                 {
 
                     grd_Main.Children.Remove(frm_ImgTitle);
                     frm_ImgTitle.HorizontalOptions = LayoutOptions.Start;
-                    frm_ImgTitle.WidthRequest = frm_ImgTitle.HeightRequest = 40;
                     _PinParent.AddTitleContent(frm_ImgTitle);
 
                     _PinParent.ForceLayout();
@@ -54,52 +55,21 @@ namespace Andruino.Views
             }
         }
 
-
-        private async void Refresh(MainPage arg1, string arg2)
-        {
-            await Task.Delay(1);
-        }
-
-        private async Task Send(string message)
-        {
-            var client = new UdpClient();
-            try
-            {
-                IPEndPoint ep = new IPEndPoint(IPAddress.Parse(((App)App.Current).CurrentConfig.ServerIP), ((App)App.Current).CurrentConfig.ServerPort); // endpoint where server is listening
-                client.Connect(ep);
-
-                var messageArray = Encoding.ASCII.GetBytes("[CMD]" + message + "[/CMD]");
-                ViewModels.VM_UDPReceiver.Instance.AddLog(Encoding.ASCII.GetString(messageArray));
-                await client.SendAsync(messageArray, messageArray.Count());
-
-                var port = ((IPEndPoint)client.Client.LocalEndPoint).Port;
-                ViewModels.VM_UDPReceiver.Instance.StartListener(port);
-            }
-            catch (Exception ex)
-            {
-                ((MainPage)App.Current.MainPage).Manage_Error(ex);
-            }
-            finally
-            {
-                client.Close();
-            }
-        }
-
         private async void Send_Tapped(object sender, EventArgs e)
         {
             stk_Send.IsEnabled = false;
             await frm_Send.ScaleTo(0.5, 100);
             if (!String.IsNullOrEmpty(tb_Command.Text))
-                await Send(tb_Command.Text.ToUpper());
+                Send(tb_Command.Text);
+
             await frm_Send.ScaleTo(1, 100);
             stk_Send.IsEnabled = true;
         }
-
         private async void TEMP_Tapped(object sender, EventArgs e)
         {
             stkCommands.IsEnabled = false;
             await frm_TEMP.ScaleTo(0.5, 100);
-            await Send("TEMP");
+            Send("TEMP");
             await frm_TEMP.ScaleTo(1, 100);
             stkCommands.IsEnabled = true;
         }
@@ -107,24 +77,32 @@ namespace Andruino.Views
         {
             stkCommands.IsEnabled = false;
             await frm_DATE.ScaleTo(0.5, 100);
-            await Send("DATE");
+            Send("DATE");
             await frm_DATE.ScaleTo(1, 100);
             stkCommands.IsEnabled = true;
         }
-        private async void SETDATE_Tapped(object sender, EventArgs e)
+        private async void HR_Tapped(object sender, EventArgs e)
         {
             stkCommands.IsEnabled = false;
-            await frm_SETDATE.ScaleTo(0.5, 100);
-            await Send("SETDATE");
-            await frm_SETDATE.ScaleTo(1, 100);
+            await frm_HR.ScaleTo(0.5, 100);
+            Send("HR");
+            await frm_HR.ScaleTo(1, 100);
             stkCommands.IsEnabled = true;
         }
         private async void LIGHT_Tapped(object sender, EventArgs e)
         {
             stkCommands.IsEnabled = false;
             await frm_LIGHT.ScaleTo(0.5, 100);
-            await Send("LIGHT");
+            Send("LIGHT");
             await frm_LIGHT.ScaleTo(1, 100);
+            stkCommands.IsEnabled = true;
+        }
+        private async void TEMPC_Tapped(object sender, EventArgs e)
+        {
+            stkCommands.IsEnabled = false;
+            await frm_TEMPC.ScaleTo(0.5, 100);
+            Send("TEMPC");
+            await frm_TEMPC.ScaleTo(1, 100);
             stkCommands.IsEnabled = true;
         }
 
@@ -133,7 +111,12 @@ namespace Andruino.Views
             try
             {
                 frm_ImgTitle.IsEnabled = false;
-                await frm_ImgTitle.ScaleTo(0.5, 250).ContinueWith(a => frm_ImgTitle.ScaleTo(1, 100));
+                await frm_ImgTitle.ScaleTo(0.5, 250).ContinueWith(async a => await frm_ImgTitle.ScaleTo(1, 100));
+
+                lbl_Info_Title.IsVisible = !lbl_Info_Title.IsVisible;
+                lbl_Info_Title.Opacity = 0;
+                await lbl_Info_Title.FadeTo(1, 750);
+
                 frm_ImgTitle.IsEnabled = true;
             }
             catch (Exception ex)
@@ -146,13 +129,97 @@ namespace Andruino.Views
         {
             try
             {
-                lbl_DATE.IsVisible = lbl_LIGHT.IsVisible = lbl_SETDATE.IsVisible = lbl_TEMP.IsVisible = !lbl_TEMP.IsVisible;
+                stk_Send.IsVisible = !stk_Send.IsVisible;
+                lbl_DATE.IsVisible = lbl_LIGHT.IsVisible = lbl_HR.IsVisible = lbl_TEMPC.IsVisible = lbl_Send.IsVisible = lbl_TEMP.IsVisible = lbl_Info_MessageResult.IsEnabled = !lbl_TEMP.IsVisible;
                 await stkCommands.ScaleTo(0.9, 250).ContinueWith(a => stkCommands.ScaleTo(1, 100));
+                Title_Tapped(null, null);
             }
             catch (Exception ex)
             {
                 ((Views.MainPage)App.Current.MainPage).Manage_Error(ex);
             }
+        }
+
+
+        private async void Send(string command)
+        {
+            try
+            {
+                _currentCommandWaiting = command.ToUpper() + "_";
+                await ViewModels.VM_UDPSender.Instance.SendAsync(((App)App.Current).CurrentConfig, "[CMD]" + command.ToUpper() + "[/CMD]");
+            }
+            catch (Exception ex)
+            {
+                ((MainPage)App.Current.MainPage).Manage_Error(ex);
+            }
+        }
+
+        private void Instance_GetResponse(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(_currentCommandWaiting)) return;
+            try
+            {
+                var response = ViewModels.VM_UDPReceiver.Instance.Log.Last();
+                if (response != null && response.StartsWith(_currentCommandWaiting))
+                {
+                    ViewModels.VM_UDPReceiver.Instance.Log.Remove(response);
+                    response = response.Replace(_currentCommandWaiting, "");
+                    ViewModels.VM_UDPReceiver.Instance.Log.Add(response);
+
+                    _currentCommandWaiting = string.Empty;
+
+                    ShowMessage(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                ((Views.MainPage)App.Current.MainPage).Manage_Error(ex);
+            }
+        }
+
+        bool _MessageFading = false;
+        bool _CancelFading = false;
+        private void ShowMessage(string Message)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                try
+                {
+                    if (_MessageFading)
+                    {
+                        _CancelFading = true;
+                        ViewExtensions.CancelAnimations(stk_MessageResult);
+                        stk_MessageResult.ForceLayout();
+                        //await Task.Delay(100);
+                        //await stk_MessageResult.FadeTo(1, 10);
+                        _MessageFading = false;
+                        stk_MessageResult.IsVisible = true;
+                        stk_MessageResult.ForceLayout();
+                        _CancelFading = false;
+                    }
+
+                    lbl_MessageResult.Text = Message;
+
+                    stk_MessageResult.IsVisible = true;
+                    _MessageFading = true;
+                    stk_MessageResult.Opacity = 1;
+                    await stk_MessageResult.FadeTo(0.1, 5 * 1000).ContinueWith(e =>
+                    {
+                        if ((!e.IsCanceled || !e.IsFaulted) && _MessageFading && !_CancelFading)
+                        {
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                _MessageFading = false;
+                                stk_MessageResult.IsVisible = false;
+                            });
+                        }
+                    });         
+                }
+                catch (Exception ex)
+                {
+                    ((Views.MainPage)App.Current.MainPage).Manage_Error(ex);
+                }
+            });
         }
     }
 }

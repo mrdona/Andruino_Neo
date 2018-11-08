@@ -11,16 +11,26 @@ using Xamarin.Forms.Xaml;
 
 namespace Andruino.Views
 {
+    /// <summary>
+    /// Page Principale de l'application
+    /// </summary>
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage
     {
+        bool _gifRunning = false;
 
+
+        /// <summary>
+        /// Constructeur
+        /// </summary>
         public MainPage()
         {
             InitializeComponent();
 
             try
             {
+                //MessagingCenter.Subscribe<MainPage, string>(this, "Refresh", Refresh);
+
                 frm_Error.BackgroundColor = Color.LightGray.MultiplyAlpha(0.7);
                 InitControls();
             }
@@ -34,13 +44,22 @@ namespace Andruino.Views
             }
         }
 
+        private async void Refresh(MainPage arg1, string arg2)
+        {
+            await Task.Delay(1);
+        }
+
+
+        /// <summary>
+        /// Rafraîchissemnt automatique
+        /// </summary>
         public async void RunRefresh()
         {
             try
             {
                 while (true)
                 {
-                    RandomBackGround();
+                    await RandomBackGroundAsync();
                     await Task.Delay(10 * 1000);
                 }
             }
@@ -50,7 +69,11 @@ namespace Andruino.Views
             }
         }
 
-        public void RandomBackGround()
+        /// <summary>
+        /// Change la tête de l'Arduino
+        /// </summary>
+        /// <returns></returns>
+        public async Task RandomBackGroundAsync()
         {
             try
             {
@@ -80,6 +103,8 @@ namespace Andruino.Views
 
                     case 18: img_background.Source = ImageSource.FromFile("test.gif"); break;
                 }
+                await img_background.ScaleTo(0.5, 150).ContinueWith(a => img_background.ScaleTo(1, 50));
+
             }
             catch (Exception ex)
             {
@@ -88,15 +113,30 @@ namespace Andruino.Views
         }
 
 
+        /// <summary>
+        /// Tous les controles
+        /// </summary>
         ObservableCollection<View> controls = new ObservableCollection<View>();
+
+        /// <summary>
+        /// Les controles à afficher dans le carousel
+        /// </summary>
         IEnumerable<View> controls_UnPin
         {
             get { return controls.Where(c => ((uc_PinCard)c).IsMinimize); }
         }
+
+        /// <summary>
+        /// Les controles à afficher dans le stack principal
+        /// </summary>
         IEnumerable<View> controls_Pin
         {
             get { return controls.Where(c => !((uc_PinCard)c).IsMinimize); }
         }
+
+        /// <summary>
+        /// Création des controles de la page
+        /// </summary>
         private void InitControls()
         {
             try
@@ -106,14 +146,14 @@ namespace Andruino.Views
                 var commands = new uc_PinCard();
                 commands.AddContent(new Views.V_Command() { IsEnabled = false });
                 commands.Scale = 0.5;
-                commands.AddTitleContent(new Label()
-                {
-                    Text = "Commandes",
-                    VerticalOptions = LayoutOptions.Center,
-                    VerticalTextAlignment = TextAlignment.Center,
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 18
-                });
+                //commands.AddTitleContent(new Label()
+                //{
+                //    Text = "Commandes",
+                //    VerticalOptions = LayoutOptions.Center,
+                //    VerticalTextAlignment = TextAlignment.Center,
+                //    FontAttributes = FontAttributes.Bold,
+                //    FontSize = 18
+                //});
                 commands.Tapped += (o, e) => { frm_Tapped(o, e); };
                 commands.UnPinTapped += (o, e) => { frm_UnPin(o, e); };
                 controls.Add(commands);
@@ -121,13 +161,13 @@ namespace Andruino.Views
                 var log = new uc_PinCard();
                 log.AddContent(new Views.V_UDPLog() { IsEnabled = false });
                 log.Scale = 0.5;
-                log.AddTitleContent(new Label()
-                {
-                    Text = "Log",
-                    VerticalOptions = LayoutOptions.Center, VerticalTextAlignment = TextAlignment.Center,
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 18
-                });
+                //log.AddTitleContent(new Label()
+                //{
+                //    Text = "Log",
+                //    VerticalOptions = LayoutOptions.Center, VerticalTextAlignment = TextAlignment.Center,
+                //    FontAttributes = FontAttributes.Bold,
+                //    FontSize = 18
+                //});
                 log.Tapped += (o, e) => { frm_Tapped(o, e); };
                 log.UnPinTapped += (o, e) => { frm_UnPin(o, e); };
                 controls.Add(log);
@@ -135,17 +175,33 @@ namespace Andruino.Views
                 var config = new uc_PinCard();
                 config.AddContent(new Views.V_Config() { IsEnabled = false });
                 config.Scale = 0.5;
-                config.AddTitleContent(new Label()
+                //config.AddTitleContent(new Label()
+                //{
+                //    Text = "Configuration",
+                //    VerticalOptions = LayoutOptions.Center,
+                //    VerticalTextAlignment = TextAlignment.Center,
+                //    FontAttributes = FontAttributes.Bold,
+                //    FontSize = 18
+                //});
+                config.Tapped += (o, e) => { frm_Tapped(o, e); };
+                config.UnPinTapped += (o, e) => { frm_UnPin(o, e); };
+                controls.Add(config);
+
+                var lightChart = new uc_PinCard();
+                lightChart.AddContent(new Views.uc_LightChart() { IsEnabled = false });
+                lightChart.Scale = 0.5;
+                lightChart.AddTitleContent(new Label()
                 {
-                    Text = "Configuration",
+                    Text = "Luminosité",
                     VerticalOptions = LayoutOptions.Center,
                     VerticalTextAlignment = TextAlignment.Center,
                     FontAttributes = FontAttributes.Bold,
                     FontSize = 18
                 });
-                config.Tapped += (o, e) => { frm_Tapped(o, e); };
-                config.UnPinTapped += (o, e) => { frm_UnPin(o, e); };
-                controls.Add(config);
+                lightChart.Tapped += (o, e) => { frm_Tapped(o, e); };
+                lightChart.UnPinTapped += (o, e) => { frm_UnPin(o, e); };
+                controls.Add(lightChart);
+
 
                 //var log2 = new V_UDPLog2();
                 //log2.Scale = 0.5;
@@ -194,6 +250,10 @@ namespace Andruino.Views
         }
 
 
+        /// <summary>
+        /// Gestion des erreurs
+        /// </summary>
+        /// <param name="ex"></param>
         public void Manage_Error(Exception ex)
         {
             try
@@ -210,7 +270,12 @@ namespace Andruino.Views
             }
         }
 
-        bool _gifRunning = false;
+        /// <summary>
+        /// Touche sur l'écran : masque l'erreur affichée si il y a lieu ;
+        /// affiche l'image animée en fond d'écran
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainScreen_Tapped(object sender, EventArgs e)
         {
             if(!frm_Error.IsVisible)
@@ -251,18 +316,33 @@ namespace Andruino.Views
             }
         }
 
+        /// <summary>
+        /// Touche sur l'erreur, affiche le stack trace
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frm_Error_Tapped(object sender, EventArgs e)
         {
             sv_Error_Detail.IsVisible = !sv_Error_Detail.IsVisible;
         }
      
+        /// <summary>
+        /// Ferme le stack trace de l'erreur
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frm_Error_Detail_Close_Tapped(object sender, EventArgs e)
         {
             sv_Error_Detail.IsVisible = !sv_Error_Detail.IsVisible;
         }
 
 
-        private async void frm_Tapped(object sender, EventArgs e)
+        /// <summary>
+        /// Touche sur un control; l'affiche dans le stack principal
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void frm_Tapped(object sender, EventArgs e)
         {
             try
             {
@@ -294,6 +374,11 @@ namespace Andruino.Views
             }
         }
 
+        /// <summary>
+        /// Fermeture d'un control, l'affiche dans le carousel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frm_UnPin(object sender, EventArgs e)
         {
             try
@@ -321,6 +406,10 @@ namespace Andruino.Views
             }
         }
 
+        /// <summary>
+        /// Rafraîchissement du carousel et du stack principal
+        /// </summary>
+        /// <param name="wasOneOrNone"></param>
         private void Refresh_Stacks(bool wasOneOrNone)
         {
             try
@@ -348,6 +437,12 @@ namespace Andruino.Views
             }
         }
 
+
+        /// <summary>
+        /// Lors de l'apparition d'un item dans le carousel
+        /// </summary>
+        /// <param name="view"></param>
+        /// <param name="args"></param>
         private void carousel_Main_ItemAppearing(CardsView view, PanCardView.EventArgs.ItemAppearingEventArgs args)
         {
             try
@@ -361,6 +456,11 @@ namespace Andruino.Views
             }
         }
 
+        /// <summary>
+        /// Réduit le carousel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void CarrouselHide_Tapped(object sender, EventArgs e)
         {
             try

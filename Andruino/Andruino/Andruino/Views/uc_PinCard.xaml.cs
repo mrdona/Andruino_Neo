@@ -66,9 +66,9 @@ namespace Andruino.Views
 
         private async void UnPin_Tapped(object sender, EventArgs e)
         {
-            await frm_Close.ScaleTo(0.5, 100);
+            await frm_Close.ScaleTo(0.5, 150);
             UnPinTapped?.Invoke(this, null);
-            await frm_Close.ScaleTo(0.5, 100);
+            await frm_Close.ScaleTo(1, 75);
         }
 
 
@@ -86,6 +86,13 @@ namespace Andruino.Views
                 stk_Title_Content.IsVisible = !value;
                 frm_Close.IsVisible = !value;
             }
+        }
+
+        public async void Close()
+        {
+            await frm_Close.ScaleTo(0.5, 150);
+            UnPinTapped?.Invoke(this, null);
+            await frm_Close.ScaleTo(1, 75);
         }
     }
 }

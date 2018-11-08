@@ -5,46 +5,123 @@
              x:Class="Andruino.Views.V_Config" VerticalOptions="CenterAndExpand">
   <ContentView.Content>
         <Grid x:Name="grd_Main">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="grd_Main_Tapped"></TapGestureRecognizer>
+            </Grid.GestureRecognizers>
+
             <ffimageloading:CachedImage x:Name="img_background" DownsampleToViewSize="True" 
                                    HeightRequest="150" WidthRequest="150" Aspect="AspectFit" 
                                    VerticalOptions="Center" HorizontalOptions="Center" 
                                    Opacity="0.2" Source="btnSettings.png"/>
 
-            <StackLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" Margin="5">
-                    <Label Text="Local IP : " VerticalOptions="Center"></Label>
-                    <Label x:Name="lbl_IP" Text="{Binding LocalIP}" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center"></Label>
+            <StackLayout VerticalOptions="CenterAndExpand">
+
+                <StackLayout x:Name="stk_ConfigProps" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" IsVisible="False">
+                    
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" Margin="5">
+                        <Label Text="Local IP : " VerticalOptions="Center"></Label>
+                        <Label x:Name="lbl_IP" Text="{Binding LocalIP}" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" 
+                               VerticalOptions="Center" VerticalTextAlignment="Center"></Label>
+                        <StackLayout HorizontalOptions="FillAndExpand">
+                            <Switch x:Name="sw_ModeDemo" IsToggled="{Binding ModeDemo}" HorizontalOptions="Center"></Switch>
+                            <Label x:Name="lbl_Info_ModeDemo" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                   Text="Mode Démonstration" IsVisible="False" FontSize="Micro" FontAttributes="Bold"></Label>
+                        </StackLayout>
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="5">
+                        <Label Text="Server : "  VerticalOptions="Center"></Label>
+                        <Entry x:Name="lbl_IPServer" Text="{Binding ServerIP}" Keyboard="Numeric" Placeholder="Server IP"
+                                HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" IsEnabled="{Binding NotAutoPing}"></Entry>
+                        <Label Text=":"  VerticalOptions="Center"></Label>
+                        <Entry x:Name="lbl_PortServer" Text="{Binding ServerPort}" Keyboard="Numeric" Placeholder="Server Port" 
+                                HorizontalTextAlignment="Center" IsEnabled="{Binding NotAutoPing}"></Entry>
+                    </StackLayout>
+                    
                 </StackLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="5">
-                    <Label Text="Server IP : "  VerticalOptions="Center"></Label>
-                    <Entry x:Name="lbl_IPServer" Text="{Binding ServerIP}" Keyboard="Numeric" Placeholder="Server IP"
-                            HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" IsEnabled="{Binding NotAutoPing}"></Entry>
-                    <Label Text=":"  VerticalOptions="Center"></Label>
-                    <Entry x:Name="lbl_PortServer" Text="{Binding ServerPort}" Keyboard="Numeric" Placeholder="Server Port" 
-                            HorizontalTextAlignment="Center" IsEnabled="{Binding NotAutoPing}"></Entry>
-                    <Switch x:Name="sw_PingServer" IsToggled="{Binding AutoPing}"></Switch>
-                </StackLayout>
-            </StackLayout>
-        
-            <Frame x:Name="frm_Ping" HorizontalOptions="Start" VerticalOptions="Start" Margin="5" Padding="0" BackgroundColor="Transparent"
-                    WidthRequest="40" HeightRequest="40">
-                <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Ping_Tapped"/>
-                </Frame.GestureRecognizers>
-                <ffimageloading:CachedImage x:Name="img_ServerSate" WidthRequest="40" HeightRequest="40"
+
+
+                <StackLayout x:Name="stkCommands" Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                    
+                    <Frame x:Name="frm_Reset" HorizontalOptions="Center" VerticalOptions="Start" Margin="5" Padding="0" BackgroundColor="Transparent">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Reset_Tapped"/>
+                        </Frame.GestureRecognizers>
+                        <StackLayout>
+                            <ffimageloading:CachedImage x:Name="img_Reset" WidthRequest="50" HeightRequest="50"
+                                            Aspect="AspectFit" Source="reset.png"
+			                                DownsampleToViewSize="true" CacheType="None">
+                            </ffimageloading:CachedImage>
+                            <Label x:Name="lbl_Info_Reset" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                               Text="Reset de l'Arduino" IsVisible="False" FontSize="Micro" FontAttributes="Bold"></Label>
+                        </StackLayout>
+                    </Frame>
+
+                    <Frame x:Name="frm_Network" HorizontalOptions="Center" VerticalOptions="Start" Margin="5" Padding="0" BackgroundColor="Transparent">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Network_Tapped"/>
+                        </Frame.GestureRecognizers>
+                        <StackLayout>
+                            <ffimageloading:CachedImage x:Name="img_Wifi" WidthRequest="50" HeightRequest="50"
+                                            Aspect="AspectFit" Source="network.png"
+			                                DownsampleToViewSize="true" CacheType="None">
+                            </ffimageloading:CachedImage>
+                            <Label x:Name="lbl_Info_Network" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                               Text="Etat réseau de l'Arduino" IsVisible="False" FontSize="Micro" FontAttributes="Bold"></Label>
+                        </StackLayout>
+                    </Frame>
+
+                    <Frame x:Name="frm_Link" HorizontalOptions="Center" VerticalOptions="Start" Margin="5" Padding="0" BackgroundColor="Transparent">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Link_Tapped"/>
+                        </Frame.GestureRecognizers>
+                        <StackLayout>
+                            <ffimageloading:CachedImage x:Name="img_Link" WidthRequest="50" HeightRequest="50"
+                                            Aspect="AspectFit" Source="link.png"
+			                                DownsampleToViewSize="true" CacheType="None">
+                            </ffimageloading:CachedImage>
+                            <Label x:Name="lbl_Info_Link" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                               Text="Initialisation de l'Arduino" IsVisible="False" FontSize="Micro" FontAttributes="Bold"></Label>
+                        </StackLayout>
+                    </Frame>
+
+                    <Frame x:Name="frm_Ping" HorizontalOptions="Center" VerticalOptions="Start" Margin="5" Padding="0" BackgroundColor="Transparent">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Ping_Tapped"/>
+                        </Frame.GestureRecognizers>
+                        <StackLayout>
+                            <ffimageloading:CachedImage x:Name="img_ServerSate" WidthRequest="50" HeightRequest="50"
                                             Aspect="AspectFit" Source="connexionKO.png"
 			                                DownsampleToViewSize="true" CacheType="None">
-                </ffimageloading:CachedImage>
-            </Frame>
+                            </ffimageloading:CachedImage>
+                            <Label x:Name="lbl_Info_Ping" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                               Text="Ping l'Arduino" IsVisible="False" FontSize="Micro" FontAttributes="Bold"></Label>
+                        </StackLayout>
+                    </Frame>
+                
+                </StackLayout>
+
+                <StackLayout x:Name="stk_MessageResult" HorizontalOptions="CenterAndExpand" VerticalOptions="End">
+                    <Label x:Name="lbl_MessageResult" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+                           FontAttributes="Bold" FontSize="Small"></Label>
+                    <Label x:Name="lbl_Info_MessageResult" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                               Text="Retour de l'Arduino" IsVisible="False" FontSize="Micro" FontAttributes="Bold"></Label>
+                </StackLayout>
+                
+            </StackLayout>
 
             <Frame x:Name="frm_ImgTitle" HorizontalOptions="Center" VerticalOptions="Start" Margin="5" Padding="0" BackgroundColor="Transparent">
                 <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Title_Tapped"/>
+                    <TapGestureRecognizer Tapped="grd_Main_Tapped"/>
                 </Frame.GestureRecognizers>
-                <ffimageloading:CachedImage x:Name="img_Date" WidthRequest="40" HeightRequest="40"
+                <StackLayout Orientation="Horizontal">
+                    <ffimageloading:CachedImage x:Name="img_ImgTitle" WidthRequest="40" HeightRequest="40"
 			                        DownsampleToViewSize="true"
 			                        Source = "btnSettings.png">
-                </ffimageloading:CachedImage>
+                    </ffimageloading:CachedImage>
+                    <Label x:Name="lbl_Info_Title" HorizontalOptions="Start" VerticalOptions="Center" HorizontalTextAlignment="Start" VerticalTextAlignment="Center"
+                               Text="Configuration Arduino" IsVisible="False" FontSize="Medium" FontAttributes="Bold"></Label>
+                </StackLayout>
             </Frame>
 
         </Grid>
